@@ -16,4 +16,16 @@ impl Blockchain {
     pub fn add(&mut self, block: Box<Block>) {
         self.blocks.push(block);
     }
+
+    pub fn len(&self) -> usize {
+        self.blocks.len()
+    }
+
+    pub fn get(&self, idx: usize) -> Option<&Box<Block>> {
+        if idx >= self.blocks.len() {
+            Option::None
+        } else {
+            Option::Some(&self.blocks[idx])
+        }
+    }
 }
