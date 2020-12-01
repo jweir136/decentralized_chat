@@ -1,4 +1,5 @@
 use ring::error::Unspecified;
+#[allow(unused_imports)]
 use ring::{
     rand,
     signature::{self, KeyPair, Ed25519KeyPair, Signature},
@@ -29,7 +30,7 @@ mod tests {
     use super::*;
     
     #[test]
-    fn correct_signing_test_1() {
+    fn correct_signing_test() {
         let tests: [&str; 3] = [
             "test",
             "hello world",
@@ -40,6 +41,7 @@ mod tests {
             let keys: Ed25519KeyPair = generate_keys().unwrap();
 
             let sig = sign_data(&keys, test.as_bytes());
+            #[allow(unreachable_patterns)]
             match verify_data(keys.public_key().as_ref(), test.as_bytes(), sig) {
                 false => { panic!(); },
                 true => {},
@@ -49,4 +51,15 @@ mod tests {
     }
 
     // TODO: Add incorrect signature testing.
+    #[test]
+    pub fn incorrect_signing_test() {
+        let mut keys = generate_keys().unwrap();
+        let sig = sign_data(&keys, "test".as_bytes());
+        keys = generate_keys().unwrap();
+
+        match verify_data(keys.public_key().as_ref(), "test".as_bytes(), sig) {
+            false => {},
+            _ => { panic!(); }
+        };
+    }
 }
