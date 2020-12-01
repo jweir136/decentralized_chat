@@ -4,10 +4,10 @@ use ring::digest::{Digest, Context, SHA256};
 use ring::signature::{Ed25519KeyPair, Signature};
 
 use block_cryptography::hashing::hash_digest;
-use block_cryptography::digital_signing::{sign_data};
+use block_cryptography::digital_signing::{sign_data, verify_data};
 
 trait Block {
-    fn is_correct(&self, key: &Key) -> bool;
+    fn is_correct(&self, public_key: &[u8]) -> bool;
 }
 
 struct Chatblock {
@@ -55,5 +55,11 @@ impl Chatblock {
         };
         block.signature = Option::Some(sign_data(&keypair, &format!("{:?}", block.hash).as_bytes()));
         block
+    }
+}
+
+impl Block for Chatblock {
+    fn is_correct(&self, public_key: &[u8]) -> bool {
+        verify_data(public_key, &format!("{:?}", self.hash).as_bytes(), self.signature.unwrap())
     }
 }
