@@ -1,7 +1,7 @@
 use ring::digest::{Context, Digest};
 use std::io::{Read, Result};
 
-pub fn hash_digest<R: Read>(mut reader: R, mut context: Context) -> Result<Digest> {
+pub fn hash_digest<R: Read>(reader: &mut R, mut context: Context) -> Result<Digest> {
     let mut buffer = [0; 1024];
     
     loop {
