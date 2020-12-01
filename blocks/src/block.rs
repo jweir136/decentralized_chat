@@ -6,7 +6,7 @@ use ring::signature::{Ed25519KeyPair, Signature};
 use block_cryptography::hashing::hash_digest;
 use block_cryptography::digital_signing::{sign_data, verify_data};
 
-trait Block {
+pub trait Block {
     fn is_correct(&self, public_key: &[u8]) -> bool;
 }
 
