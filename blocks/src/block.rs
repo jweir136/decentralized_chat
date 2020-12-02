@@ -16,7 +16,6 @@ struct Chatblock {
     time: Instant,
     msg: String,
     hash: Option<Digest>,
-    last_hash: Option<Digest>,
     signature: Option<Signature>,
     pos: usize
 }
@@ -37,14 +36,13 @@ impl std::io::Read for Chatblock {
 }
 
 impl Chatblock {
-    pub fn new(to: String, from: String, msg: String, last_hash: Digest, keypair: &Ed25519KeyPair) -> Self {
+    pub fn new(to: String, from: String, msg: String, keypair: &Ed25519KeyPair) -> Self {
         let mut block: Self = Chatblock {
             to: to,
             from: from,
             time: Instant::now(),
             msg: msg,
             hash: Option::None,
-            last_hash: Option::Some(last_hash),
             signature: Option::None,
             pos: 0
         };
@@ -66,7 +64,6 @@ impl Block for Chatblock {
 
 struct Nullblock {
     hash: Option<Digest>,
-    last_hash: Digest,
     pos: usize
 }
 
@@ -86,10 +83,9 @@ impl std::io::Read for Nullblock {
 }
 
 impl Nullblock {
-    pub fn new(last_hash: Digest) -> Self {
+    pub fn new() -> Self {
         let mut block: Nullblock = Nullblock {
             hash: Option::None,
-            last_hash: last_hash,
             pos: 0
         };
         block.hash = Option::Some(hash_digest(&mut block, Context::new(&SHA256)).unwrap());
