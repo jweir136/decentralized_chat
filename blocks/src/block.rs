@@ -1,4 +1,5 @@
 use std::time::Instant;
+#[allow(unused_imports)]
 use ring::hmac::{Key, Tag};
 use ring::digest::{Digest, Context, SHA256};
 use ring::signature::{Ed25519KeyPair, Signature};
