@@ -10,7 +10,7 @@ pub trait Block {
     fn is_correct(&self, public_key: &[u8]) -> bool;
 }
 
-struct Chatblock {
+pub struct Chatblock {
     to: String,
     from: String,
     time: Instant,
@@ -62,44 +62,7 @@ impl Block for Chatblock {
     }
 }
 
-struct Nullblock {
-    hash: Option<Digest>,
-    pos: usize
-}
-
-impl std::io::Read for Nullblock {
-    fn read(&mut self, buff: &mut [u8]) -> std::io::Result<usize> {
-        let mut n_read: usize = 0;
-        let string: &str = "NULL";
-
-        for i in self.pos..buff.len() {
-            buff[i] = string.as_bytes()[self.pos + i];
-            n_read += 1;
-        }
-
-        self.pos += n_read;
-        Ok(n_read)
-    }
-}
-
-impl Nullblock {
-    pub fn new() -> Self {
-        let mut block: Nullblock = Nullblock {
-            hash: Option::None,
-            pos: 0
-        };
-        block.hash = Option::Some(hash_digest(&mut block, Context::new(&SHA256)).unwrap());
-        block
-    }
-}
-
-impl Block for Nullblock {
-    fn is_correct(&self, public_key: &[u8]) -> bool {
-        true
-    }
-}
-
-struct Genesisblock {
+pub struct Genesisblock {
     hash: Option<Digest>,
     pos: usize
 }
