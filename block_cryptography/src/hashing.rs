@@ -45,7 +45,7 @@ mod tests {
             let context = Context::new(&SHA256);
             file = File::open(filenames[i]).unwrap();
 
-            match hash_digest(file, context) {
+            match hash_digest(&mut file, context) {
                 Ok(hash) => { assert_eq!(format!("{:?}", hash), results[i])},
                 _ => { panic!() }
             };
